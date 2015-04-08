@@ -1,0 +1,38 @@
+html, body
+{
+    height: 100%;
+}
+
+.navbar {
+	 margin-bottom: 0px;
+}
+
+.banner {
+	background-image: URL("../img/banner.jpg");
+	background-size: cover;
+	height: 400px;
+}
+
+.row-centered {
+    text-align:center;
+}
+
+.options-panel{
+	border-top: solid 2px gray;
+	border-bottom: solid 2px gray;
+	padding-top: 1.5%
+}
+.form-row{
+	padding:1.5% 4%;
+	border-radius: 15px;
+}
+.col-center{
+	margin:0px auto;
+	float:none
+}
+.options-tittle{
+	text-align:center;
+	padding-bottom: 2%;
+	margin-top:0px;
+	color: #777;
+}
