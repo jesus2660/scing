@@ -47,7 +47,6 @@ class Comunidad(models.Model):
     parroquia = models.CharField(max_length=64)
     municipio = models.CharField(max_length=64)
     estado = models.CharField(max_length=64)
-    asesor = models.ForeignKey("Asesor",blank=True,null=True)
     
     class Meta:
         verbose_name_plural = "Comunidades"
@@ -72,7 +71,7 @@ class Estudiante(models.Model):
     comunidad  = models.ForeignKey("Comunidad",blank=True,null=True)
     
     def __unicode__(self):
-        return "%s %s" % self.nombres + self.apellidos
+        return "%s %s" % (self.nombres, self.apellidos)
 
 
 ESTATUS_PROFESOR = (
@@ -84,8 +83,8 @@ class Profesor(models.Model):
     nombres = models.CharField(max_length=32)
     apellidos = models.CharField(max_length=32)
     ci = models.CharField(max_length=10,verbose_name="CI")
-    escuela = models.ForeignKey(Escuela)
-    unidad_academica = models.ForeignKey(UnidadAcademica)
+    escuela = models.ForeignKey(Escuela,blank=True,null=True)
+    unidad_academica = models.ForeignKey(UnidadAcademica,blank=True,null=True)
     facultad = models.ForeignKey(Facultad)
     numero_induccion = models.CharField(max_length=10,verbose_name="número de inducción")
     estatus = models.CharField(max_length=1, choices=ESTATUS_PROFESOR)
@@ -97,7 +96,7 @@ class Profesor(models.Model):
         verbose_name_plural = "Profesores"
         
     def __unicode__(self):
-        return "%s %s" % self.nombres + self.apellidos
+        return "%s %s" % (self.nombres,self.apellidos)
 
 class Asesor(models.Model):
     nombres = models.CharField(max_length=32)
@@ -112,25 +111,24 @@ class Asesor(models.Model):
         verbose_name_plural = "Asesores"
         
     def __unicode__(self):
-        return "%s (%s)" % (self.nombre,self.cargo)
+        return "%s (%s)" % (self.nombres,self.cargo)
     
     
     
 ESTATUS_PROYECTO = (
-    ("A", 'ARPOBADO'),
-    ("R", 'RENOVADO'),
-    ("C", 'CERRADO'),
+    ("A", 'Aprobado'),
+    ("R", 'Renovado'),
+    ("C", 'Cerrado'),
 )     
 
 class Proyecto(models.Model):
     codigo = models.CharField(max_length=4)
-    titulo = models.CharField(max_length=64)
+    titulo = models.CharField(max_length=256)
     responsable = models.ForeignKey(Profesor,related_name="responsable_set")
     tutores = models.ManyToManyField(Profesor,related_name="tutor_set")
     fecha_aprobacion = models.DateField(verbose_name="fecha de aprobación")
     numero_acta_aprobacion = models.CharField(max_length=16)
     escuela = models.ForeignKey(Escuela)
-    unidad_academica = models.ForeignKey(UnidadAcademica)
     archivo = models.FileField(upload_to="proyectos")
     asesor = models.ForeignKey(Asesor)
     estatus = models.CharField(max_length=1, choices=ESTATUS_PROYECTO)
@@ -139,9 +137,9 @@ class Proyecto(models.Model):
         return "[%s] %s" % (self.codigo,self.titulo)
 
 ESTATUS_CULMINACION  = (
-    ("P", 'PENDIENTE'),
-    ("C", 'CULMINADO'),
-    ("P", 'EN PROCESO'),
+    ("P", 'Pendiente'),
+    ("C", 'Culminado'),
+    ("P", 'En proceso'),
 ) 
 
 class Culminacion(models.Model):

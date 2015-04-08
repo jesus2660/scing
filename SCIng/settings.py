@@ -89,7 +89,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 SUIT_CONFIG = {
-    'ADMIN_NAME': 'SCIng',
+    'ADMIN_NAME': 'SCIng Admin v-0.3',
     'HEADER_DATE_FORMAT': 'l, j F Y', # Saturday, 16 March 2013
     'HEADER_TIME_FORMAT': 'H:i',       # 18:42'
     'CONFIRM_UNSAVED_CHANGES': True,
