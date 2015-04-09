@@ -143,10 +143,11 @@ ESTATUS_CULMINACION  = (
 ) 
 
 class Culminacion(models.Model):
+    estudiante = models.ForeignKey(Estudiante)
     semestre = models.ForeignKey(Semestre,related_name="culminacion_set")
     oficio = models.FileField(upload_to="culminaciones")
     fecha_cesc_csscfi = models.DateField(verbose_name="Fecha de trámite CESC ante CSSCFI")
-    fecha_csscfi_ccscula = models.DateField(verbose_name="Fecha de trámite CSSCFI ante OREFI")
+    fecha_csscfi_ccscula = models.DateField(verbose_name="Fecha de trámite CSSCFI ante CCSCULA")
     numero_oficio = models.CharField(max_length=16,verbose_name="número de oficio")
     estatus = models.CharField(max_length=1, choices=ESTATUS_CULMINACION)
     
@@ -155,20 +156,22 @@ class Culminacion(models.Model):
     
     
 class Inscripcion(models.Model):
+    estudiante = models.ForeignKey(Estudiante)
     semestre = models.ForeignKey(Semestre)
     fecha_cesc_csscfi = models.DateField(verbose_name="Fecha de trámite CESC ante la CSSCFI")
-    fecha_csscfi_orefi = models.DateField(verbose_name="Fecha de trámite CSSCFI ante la CCSCULA")
+    fecha_csscfi_orefi = models.DateField(verbose_name="Fecha de trámite CSSCFI ante OREFI",blank=True)
     numero_oficio = models.CharField(max_length=16,verbose_name="número de oficio")
     carta_aceptacion_tutor = models.FileField(upload_to = "inscripciones",verbose_name="carta de aceptacion del tutor")
     carta_aceptacion_comunidad = models.FileField(upload_to = "inscripciones",verbose_name="carta de aceptacion de la comunidad")
     programa_actividades = models.FileField(upload_to = "inscripciones",verbose_name="programa de actividades del estudiante")
-    aval_ce_induccion = models.FileField(upload_to = "inscripciones",verbose_name="Aval del CE para cursar Induccion y SC")
-    aval_ce_proyecto = models.FileField(upload_to = "inscripciones",verbose_name="Aval del CE para realizar proyecto externo")
+    aval_ce_induccion = models.FileField(upload_to = "inscripciones",verbose_name="Aval del CE para cursar Induccion y SC",blank=True,null=True)
+    aval_ce_proyecto = models.FileField(upload_to = "inscripciones",verbose_name="Aval del CE para realizar proyecto externo",blank=True,null=True)
     
     class Meta:
         verbose_name_plural = "Inscripciones"
         
 class Exoneracion(models.Model):
+    estudiante = models.ForeignKey(Estudiante)
     fecha = models.DateField()
     estudiante = models.ForeignKey(Estudiante)
     

@@ -58,3 +58,4 @@ target/
 .project
 .settings/org.eclipse.core.resources.prefs
 .pydevproject
+db_backup.sqlite3
