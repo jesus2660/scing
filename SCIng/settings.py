@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 """
 Django settings for SCIng project.
 
@@ -72,7 +75,7 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
-LANGUAGE_CODE = 'es-VE'
+LANGUAGE_CODE = 'es'
 
 TIME_ZONE = 'UTC'
 
@@ -89,13 +92,15 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 SUIT_CONFIG = {
-    'ADMIN_NAME': 'SCIng Admin v-0.3',
+    'ADMIN_NAME': 'SCIng Admin v-0.4',
     'HEADER_DATE_FORMAT': 'l, j F Y', # Saturday, 16 March 2013
     'HEADER_TIME_FORMAT': 'H:i',       # 18:42'
     'CONFIRM_UNSAVED_CHANGES': True,
     'MENU': (
              
-        {'app': 'auth', 'label': 'Usuarios', 'icon':'icon-lock'},
+        {'app': 'auth', 'label': 'Autenticacion', 'icon':'icon-lock'},
+        
+        {'app': 'admin', 'label': 'Bitacora','icon':'icon-list-alt'},
 
         {'label': 'Universidad', 'icon':'icon-book', 'models': ('main.semestre', 'main.escuela','main.unidadacademica','main.profesor')},
 
