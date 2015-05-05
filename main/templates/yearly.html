@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <h3>Informe anual {{year}}</h3>
+        <hr>
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th  class="text-center">N°</th>
+                    <th  class="text-center">Proyecto</th>
+                    <th  class="text-center">Nuevo/Renovado</th>
+                    <th  class="text-center">Profesor Responsable</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    {% for proyecto in proyectos %}
+                    <td>{{forloop.i}}</td>
+                    <td>{{proyecto.title}}</td>
+                    <td>{{proyecto.status}}</td>
+                    <td>{{proyecto.responsable}}</td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+        <hr>
+    </div>
+{% endblock %}
