@@ -10,7 +10,52 @@
         </div>
         <hr>
         <form class="form-inline" action="/estadisticas/">
-            <legend>Tabla de proyectos activos por año</legend>
+            <legend>Informe de gestion anual</legend>
+            <p>El informe de gestion anual incluye:</p>
+            <ol>
+                <li>Tabla de Proyectos activos.</li>
+                <li>Grafica de Proyectos nuevos y renovados.</li>
+                <li>Numero de Proyectos por Unidad Academica.</li>
+                <li>Porcentaje de Proyectos por Carrera.</li>
+                <li>Número de profesores responsables de proyectos por unidad académica.</li>
+                <li>Proyectos ofertados por cada Responsable Activo.</li>
+                <li>Otras estadisticas:
+                    <ul>                    
+                        <li>Estudiantes que culminaron servicio comunitario</li> 
+                        <li>Proyectos Ejecutados</li>
+                        <li>Tutores de Proyectos ejecutados</li>
+                        <li>Comunidades atendidas</li>
+                        <li>Número total de beneficiarios</li>
+                        <li>Semestres cursados</li>
+                    </ul>
+                </li>
+            </ol>
+            <br>
+            <div class="form-group">
+                <label for="year">Año</label>
+                <input type="text" class="form-control" id="year" value="{% now "Y" %}" name="year">
+            </div>
+            <button type="submit" class="btn btn-default">Ver</button>
+        </form>
+        <hr>
+        
+        <form class="form-inline" action="/estadisticas/">
+            <legend>Memoria y cuenta anual</legend>
+            <p>La memoria y cuenta incluye:</p>
+            <ol>
+                <li>Tabla de Proyectos aprobados en el año.</li>
+                <li>Por cada trimestre del año:
+                    <ul>                    
+                        <li>Proyectos Comunitarios  en Desarrollo</li>
+                        <li>Alumnos en Servicio Comunitario</li>
+                        <li>Alumnos que culminaron S.C.</li>
+                        <li>Comunidades Atendidas</li>
+                        <li>Tutores participantes(SC)</li>
+                        <li>Personas atendidas(SC)</li>
+                    </ul>
+                </li>
+            </ol>
+            <br>
             <div class="form-group">
                 <label for="year">Año</label>
                 <input type="text" class="form-control" id="year" value="{% now "Y" %}" name="year">
