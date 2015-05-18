@@ -36,12 +36,13 @@ def import_data(request):
         form = UploadFileForm(request.POST,request.FILES)
         if form.is_valid():
             data = handle_file_import(request.FILES['file'])
-            request.SESSION["data"]=data
+            request.session["data"]=data
             return HttpResponseRedirect('/importar/reporte/')
     else:
         form = UploadFileForm()
     return render(request, 'import.html', {"form":form})
 
 def import_data_report(request):
-    data = request.SESSION["data"]
+    data = request.session["data"]
+    del request.session["data"]
     return render(request,'import_report.html',data)

@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
+import main.models
 
 
 class Migration(migrations.Migration):
@@ -25,12 +26,12 @@ class Migration(migrations.Migration):
             name='Asesor',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('nombres', models.CharField(max_length=64)),
-                ('ci', models.CharField(max_length=10, verbose_name=b'CI', blank=True)),
+                ('nombres', main.models.TruncatingCharField(max_length=64)),
+                ('ci', main.models.TruncatingCharField(max_length=10, verbose_name=b'CI', blank=True)),
                 ('email', models.EmailField(max_length=254)),
-                ('telefono_institucional', models.CharField(max_length=11)),
-                ('telefono_celular', models.CharField(max_length=11)),
-                ('cargo', models.CharField(max_length=64)),
+                ('telefono_institucional', main.models.TruncatingCharField(max_length=12)),
+                ('telefono_celular', main.models.TruncatingCharField(max_length=12)),
+                ('cargo', main.models.TruncatingCharField(max_length=256)),
             ],
             options={
                 'verbose_name_plural': 'Asesores',
@@ -49,12 +50,12 @@ class Migration(migrations.Migration):
             name='Comunidad',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('nombre', models.CharField(max_length=64)),
-                ('rif', models.CharField(max_length=16)),
-                ('sector', models.CharField(max_length=64)),
-                ('parroquia', models.CharField(max_length=64)),
-                ('municipio', models.CharField(max_length=64)),
-                ('estado', models.CharField(max_length=64)),
+                ('nombre', main.models.TruncatingCharField(max_length=128)),
+                ('rif', main.models.TruncatingCharField(max_length=16)),
+                ('sector', main.models.TruncatingCharField(max_length=64)),
+                ('parroquia', main.models.TruncatingCharField(max_length=64)),
+                ('municipio', main.models.TruncatingCharField(max_length=64)),
+                ('estado', main.models.TruncatingCharField(max_length=64)),
             ],
             options={
                 'verbose_name_plural': 'Comunidades',
@@ -67,8 +68,8 @@ class Migration(migrations.Migration):
                 ('oficio', models.FileField(upload_to=b'culminaciones')),
                 ('fecha_cesc_csscfi', models.DateField(verbose_name=b'Fecha de tr\xc3\xa1mite CESC ante CSSCFI')),
                 ('fecha_csscfi_ccscula', models.DateField(verbose_name=b'Fecha de tr\xc3\xa1mite CSSCFI ante CCSCULA')),
-                ('numero_oficio', models.CharField(max_length=16, verbose_name=b'n\xc3\xbamero de oficio')),
-                ('estatus', models.CharField(max_length=1, choices=[(b'P', b'Pendiente'), (b'C', b'Culminado'), (b'P', b'En proceso')])),
+                ('numero_oficio', main.models.TruncatingCharField(max_length=16, verbose_name=b'n\xc3\xbamero de oficio')),
+                ('estatus', main.models.TruncatingCharField(max_length=1, choices=[(b'P', b'Pendiente'), (b'C', b'Culminado'), (b'P', b'En proceso')])),
             ],
             options={
                 'verbose_name_plural': 'Culminaciones',
@@ -78,21 +79,21 @@ class Migration(migrations.Migration):
             name='Escuela',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('nombre', models.CharField(max_length=64)),
-                ('codigo', models.CharField(max_length=16)),
+                ('nombre', main.models.TruncatingCharField(max_length=64)),
+                ('codigo', main.models.TruncatingCharField(max_length=16)),
             ],
         ),
         migrations.CreateModel(
             name='Estudiante',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('nombres', models.CharField(max_length=32)),
-                ('apellidos', models.CharField(max_length=32)),
-                ('ci', models.CharField(max_length=10, verbose_name=b'CI')),
+                ('nombres', main.models.TruncatingCharField(max_length=32)),
+                ('apellidos', main.models.TruncatingCharField(max_length=32)),
+                ('ci', main.models.TruncatingCharField(max_length=10, verbose_name=b'CI')),
                 ('email_ula', models.EmailField(max_length=254, blank=True)),
                 ('email_alternativo', models.EmailField(max_length=254)),
-                ('telefono_habitacion', models.CharField(max_length=11)),
-                ('telefono_celular', models.CharField(max_length=11)),
+                ('telefono_habitacion', main.models.TruncatingCharField(max_length=12)),
+                ('telefono_celular', main.models.TruncatingCharField(max_length=12)),
                 ('asesor', models.ForeignKey(blank=True, to='main.Asesor', null=True)),
                 ('comunidad', models.ForeignKey(blank=True, to='main.Comunidad', null=True)),
                 ('escuela', models.ForeignKey(to='main.Escuela')),
@@ -110,7 +111,7 @@ class Migration(migrations.Migration):
             name='Facultad',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('nombre', models.CharField(max_length=64)),
+                ('nombre', main.models.TruncatingCharField(max_length=64)),
             ],
             options={
                 'verbose_name_plural': 'Facultades',
@@ -122,7 +123,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('fecha_cesc_csscfi', models.DateField(verbose_name=b'Fecha de tr\xc3\xa1mite CESC ante la CSSCFI')),
                 ('fecha_csscfi_orefi', models.DateField(verbose_name=b'Fecha de tr\xc3\xa1mite CSSCFI ante OREFI', blank=True)),
-                ('numero_oficio', models.CharField(max_length=16, verbose_name=b'n\xc3\xbamero de oficio')),
+                ('numero_oficio', main.models.TruncatingCharField(max_length=16, verbose_name=b'n\xc3\xbamero de oficio')),
                 ('carta_aceptacion_tutor', models.FileField(upload_to=b'inscripciones', verbose_name=b'carta de aceptacion del tutor')),
                 ('carta_aceptacion_comunidad', models.FileField(upload_to=b'inscripciones', verbose_name=b'carta de aceptacion de la comunidad')),
                 ('programa_actividades', models.FileField(upload_to=b'inscripciones', verbose_name=b'programa de actividades del estudiante')),
@@ -138,15 +139,15 @@ class Migration(migrations.Migration):
             name='Profesor',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('nombres', models.CharField(max_length=32)),
-                ('apellidos', models.CharField(max_length=32)),
-                ('ci', models.CharField(max_length=10, verbose_name=b'CI')),
-                ('numero_induccion', models.CharField(max_length=10, verbose_name=b'n\xc3\xbamero de inducci\xc3\xb3n')),
-                ('estatus', models.CharField(max_length=1, choices=[(b'I', b'Inactivo'), (b'A', b'Activo')])),
+                ('nombres', main.models.TruncatingCharField(max_length=32)),
+                ('apellidos', main.models.TruncatingCharField(max_length=32)),
+                ('ci', main.models.TruncatingCharField(max_length=10, verbose_name=b'CI')),
+                ('numero_induccion', main.models.TruncatingCharField(max_length=10, verbose_name=b'n\xc3\xbamero de inducci\xc3\xb3n')),
+                ('estatus', main.models.TruncatingCharField(max_length=1, choices=[(b'I', b'Inactivo'), (b'A', b'Activo')])),
                 ('email_ula', models.EmailField(max_length=254)),
                 ('email_alternativo', models.EmailField(max_length=254)),
-                ('telefono_oficina', models.CharField(max_length=11)),
-                ('telefono_celular', models.CharField(max_length=11, blank=True)),
+                ('telefono_oficina', main.models.TruncatingCharField(max_length=12)),
+                ('telefono_celular', main.models.TruncatingCharField(max_length=12, blank=True)),
                 ('escuela', models.ForeignKey(blank=True, to='main.Escuela', null=True)),
                 ('facultad', models.ForeignKey(blank=True, to='main.Facultad', null=True)),
             ],
@@ -158,12 +159,12 @@ class Migration(migrations.Migration):
             name='Proyecto',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('codigo', models.CharField(max_length=4)),
-                ('titulo', models.CharField(max_length=256)),
+                ('codigo', main.models.TruncatingCharField(max_length=4)),
+                ('titulo', main.models.TruncatingCharField(max_length=256)),
                 ('fecha_aprobacion', models.DateField(verbose_name=b'fecha de aprobaci\xc3\xb3n')),
-                ('numero_acta_aprobacion', models.CharField(max_length=16)),
+                ('numero_acta_aprobacion', main.models.TruncatingCharField(max_length=16)),
                 ('archivo', models.FileField(null=True, upload_to=b'proyectos', blank=True)),
-                ('estatus', models.CharField(max_length=1, choices=[(b'A', b'Aprobado'), (b'R', b'Renovado'), (b'C', b'Cerrado')])),
+                ('estatus', main.models.TruncatingCharField(max_length=1, choices=[(b'A', b'Aprobado'), (b'R', b'Renovado'), (b'C', b'Cerrado')])),
                 ('facultad_adscripcion', models.ForeignKey(to='main.Facultad')),
                 ('responsable', models.ForeignKey(related_name='responsable_set', to='main.Profesor')),
                 ('tutores', models.ManyToManyField(related_name='tutor_set', to='main.Profesor')),
@@ -199,17 +200,17 @@ class Migration(migrations.Migration):
             name='Semestre',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('codigo', models.CharField(max_length=6)),
-                ('fecha_inicio', models.DateField(blank=True)),
-                ('fecha_final', models.DateField(blank=True)),
+                ('codigo', main.models.TruncatingCharField(max_length=16)),
+                ('fecha_inicio', models.DateField(null=True, blank=True)),
+                ('fecha_final', models.DateField(null=True, blank=True)),
             ],
         ),
         migrations.CreateModel(
             name='UnidadAcademica',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('nombre', models.CharField(max_length=64)),
-                ('codigo', models.CharField(max_length=16)),
+                ('nombre', main.models.TruncatingCharField(max_length=64)),
+                ('codigo', main.models.TruncatingCharField(max_length=16)),
             ],
             options={
                 'verbose_name_plural': 'Unidades Academicas',

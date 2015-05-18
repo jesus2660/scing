@@ -3,26 +3,33 @@
 
 from django.db import models
 
+class TruncatingCharField(models.CharField):
+    def get_prep_value(self, value):
+        value = super(TruncatingCharField,self).get_prep_value(value)
+        if value:
+            return value[:self.max_length]
+        return value
+
 class Escuela(models.Model):
-    nombre = models.CharField(max_length=64);
-    codigo = models.CharField(max_length=16);
+    nombre = TruncatingCharField(max_length=64);
+    codigo = TruncatingCharField(max_length=16);
     
     def __unicode__(self):
         return "%s [%s]" % (self.nombre,self.codigo)
     
 
 class Semestre(models.Model):
-    codigo = models.CharField(max_length=6)
+    codigo = TruncatingCharField(max_length=16)
     fecha_inicio = models.DateField(blank=True,null=True)
     fecha_final = models.DateField(blank=True,null=True)
     
     def __unicode__(self):
-        return self.codido
+        return self.codigo
     
 
 class UnidadAcademica(models.Model):
-    nombre = models.CharField(max_length=64);
-    codigo = models.CharField(max_length=16);
+    nombre = TruncatingCharField(max_length=64);
+    codigo = TruncatingCharField(max_length=16);
     
     class Meta:
         verbose_name_plural = "Unidades Academicas"
@@ -31,7 +38,7 @@ class UnidadAcademica(models.Model):
         return "%s [%s]" % (self.nombre,self.codigo)
 
 class Facultad(models.Model):
-    nombre = models.CharField(max_length=64);
+    nombre = TruncatingCharField(max_length=64);
 
     class Meta:
         verbose_name_plural = "Facultades"
@@ -41,12 +48,12 @@ class Facultad(models.Model):
     
     
 class Comunidad(models.Model):
-    nombre = models.CharField(max_length=64)
-    rif = models.CharField(max_length=16)
-    sector = models.CharField(max_length=64)
-    parroquia = models.CharField(max_length=64)
-    municipio = models.CharField(max_length=64)
-    estado = models.CharField(max_length=64)
+    nombre = TruncatingCharField(max_length=128)
+    rif = TruncatingCharField(max_length=16)
+    sector = TruncatingCharField(max_length=64)
+    parroquia = TruncatingCharField(max_length=64)
+    municipio = TruncatingCharField(max_length=64)
+    estado = TruncatingCharField(max_length=64)
     
     class Meta:
         verbose_name_plural = "Comunidades"
@@ -56,13 +63,13 @@ class Comunidad(models.Model):
     
 
 class Estudiante(models.Model):
-    nombres = models.CharField(max_length=32)
-    apellidos = models.CharField(max_length=32)
-    ci = models.CharField(max_length=10,verbose_name="CI");
+    nombres = TruncatingCharField(max_length=32)
+    apellidos = TruncatingCharField(max_length=32)
+    ci = TruncatingCharField(max_length=10,verbose_name="CI");
     email_ula = models.EmailField(blank=True)
     email_alternativo = models.EmailField()
-    telefono_habitacion = models.CharField(max_length=11)
-    telefono_celular = models.CharField(max_length=11)
+    telefono_habitacion = TruncatingCharField(max_length=12)
+    telefono_celular = TruncatingCharField(max_length=12)
     escuela = models.ForeignKey(Escuela)
     semestre_induccion = models.ForeignKey(Semestre,related_name="induccion_est_set",blank=True,null=True)
     semestre_inscripcion = models.ForeignKey(Semestre,related_name="inscripccion_est_set",blank=True,null=True)
@@ -82,18 +89,18 @@ ESTATUS_PROFESOR = (
 ) 
 
 class Profesor(models.Model):
-    nombres = models.CharField(max_length=32)
-    apellidos = models.CharField(max_length=32)
-    ci = models.CharField(max_length=10,verbose_name="CI")
+    nombres = TruncatingCharField(max_length=32)
+    apellidos = TruncatingCharField(max_length=32)
+    ci = TruncatingCharField(max_length=10,verbose_name="CI")
     escuela = models.ForeignKey(Escuela,blank=True,null=True)
     unidad_academica = models.ForeignKey(UnidadAcademica,blank=True,null=True)
     facultad = models.ForeignKey(Facultad,blank=True,null=True)
-    numero_induccion = models.CharField(max_length=10,verbose_name="número de inducción")
-    estatus = models.CharField(max_length=1, choices=ESTATUS_PROFESOR)
+    numero_induccion = TruncatingCharField(max_length=10,verbose_name="número de inducción")
+    estatus = TruncatingCharField(max_length=1, choices=ESTATUS_PROFESOR)
     email_ula = models.EmailField()
     email_alternativo = models.EmailField()
-    telefono_oficina = models.CharField(max_length=11)
-    telefono_celular = models.CharField(max_length=11,blank=True)
+    telefono_oficina = TruncatingCharField(max_length=12)
+    telefono_celular = TruncatingCharField(max_length=12,blank=True)
     
     class Meta:
         verbose_name_plural = "Profesores"
@@ -102,12 +109,12 @@ class Profesor(models.Model):
         return "%s %s" % (self.nombres,self.apellidos)
 
 class Asesor(models.Model):
-    nombres = models.CharField(max_length=64)
-    ci = models.CharField(max_length=10,verbose_name="CI",blank=True);
+    nombres = TruncatingCharField(max_length=64)
+    ci = TruncatingCharField(max_length=10,verbose_name="CI",blank=True);
     email = models.EmailField()
-    telefono_institucional = models.CharField(max_length=11)
-    telefono_celular = models.CharField(max_length=11)
-    cargo = models.CharField(max_length=64)
+    telefono_institucional = TruncatingCharField(max_length=12)
+    telefono_celular = TruncatingCharField(max_length=12)
+    cargo = TruncatingCharField(max_length=256)
     comunidad = models.ForeignKey(Comunidad)
     
     class Meta:
@@ -125,15 +132,15 @@ ESTATUS_PROYECTO = (
 )     
 
 class Proyecto(models.Model):
-    codigo = models.CharField(max_length=4)
-    titulo = models.CharField(max_length=256)
+    codigo = TruncatingCharField(max_length=4)
+    titulo = TruncatingCharField(max_length=256)
     responsable = models.ForeignKey(Profesor,related_name="responsable_set")
     tutores = models.ManyToManyField(Profesor,related_name="tutor_set")
     fecha_aprobacion = models.DateField(verbose_name="fecha de aprobación")
-    numero_acta_aprobacion = models.CharField(max_length=16)
+    numero_acta_aprobacion = TruncatingCharField(max_length=16)
     facultad_adscripcion = models.ForeignKey(Facultad)
     archivo = models.FileField(upload_to="proyectos",blank=True,null=True)
-    estatus = models.CharField(max_length=1, choices=ESTATUS_PROYECTO)
+    estatus = TruncatingCharField(max_length=1, choices=ESTATUS_PROYECTO)
 
     def __unicode__(self):
         return "[%s] %s" % (self.codigo,self.titulo)
@@ -150,8 +157,8 @@ class Culminacion(models.Model):
     oficio = models.FileField(upload_to="culminaciones")
     fecha_cesc_csscfi = models.DateField(verbose_name="Fecha de trámite CESC ante CSSCFI")
     fecha_csscfi_ccscula = models.DateField(verbose_name="Fecha de trámite CSSCFI ante CCSCULA")
-    numero_oficio = models.CharField(max_length=16,verbose_name="número de oficio")
-    estatus = models.CharField(max_length=1, choices=ESTATUS_CULMINACION)
+    numero_oficio = TruncatingCharField(max_length=16,verbose_name="número de oficio")
+    estatus = TruncatingCharField(max_length=1, choices=ESTATUS_CULMINACION)
     
     class Meta:
         verbose_name_plural = "Culminaciones"
@@ -162,7 +169,7 @@ class Inscripcion(models.Model):
     semestre = models.ForeignKey(Semestre)
     fecha_cesc_csscfi = models.DateField(verbose_name="Fecha de trámite CESC ante la CSSCFI")
     fecha_csscfi_orefi = models.DateField(verbose_name="Fecha de trámite CSSCFI ante OREFI",blank=True)
-    numero_oficio = models.CharField(max_length=16,verbose_name="número de oficio")
+    numero_oficio = TruncatingCharField(max_length=16,verbose_name="número de oficio")
     carta_aceptacion_tutor = models.FileField(upload_to = "inscripciones",verbose_name="carta de aceptacion del tutor")
     carta_aceptacion_comunidad = models.FileField(upload_to = "inscripciones",verbose_name="carta de aceptacion de la comunidad")
     programa_actividades = models.FileField(upload_to = "inscripciones",verbose_name="programa de actividades del estudiante")
