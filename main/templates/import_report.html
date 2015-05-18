@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <h3>Archivo {{filename}} importado a la base de datos!</h3>
+        <div class="well" role="alert">
+            <p><strong>Reporte:</strong>
+            <ul>
+            <li>{{students}} estudiantes importados a la base de datos</li>
+            {% for entry in log %}
+                <li>{{entry}}</li>
+            {% endfor %}
+            </ul>
+        </div>
+        <hr>
+    </div>
+{% endblock %}

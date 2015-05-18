@@ -113,6 +113,6 @@ SUIT_CONFIG = {
     
 }
 
-MEDIA_ROOT = '/media/'
+MEDIA_ROOT = 'C:/Users/Jesus Gomez/Documents/SC'
 
 STATIC_ROOT = '/static/'

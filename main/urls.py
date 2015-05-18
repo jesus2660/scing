@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, url
 
-from main.views import stats_yearly
+from main.views import stats_yearly, import_data, import_data_report
 from views import index, manual, docs, stats
 
 
@@ -10,4 +10,6 @@ urlpatterns = patterns('',
     url(r'^documentacion/$',docs),
     url(r'^estadisticas/$',stats),
     url(r'^estadisticas/anual/$',stats_yearly),
+    url(r'^importar/$',import_data),
+    url(r'^importar/reporte/$',import_data_report),
 )

@@ -9,15 +9,15 @@ from main.models import Semestre, Escuela, UnidadAcademica, Facultad, Comunidad,
 
 
 class SemestreAdmin(admin.ModelAdmin):
-    list_display = ("codido","fecha_inicio","fecha_final")
+    list_display = ("codigo","fecha_inicio","fecha_final")
 
 class EstudianteAdmin(admin.ModelAdmin):
-    list_display = ('nombres', 'apellidos','ci','email_ula','email_alternativo','telefono','escuela')
+    list_display = ('nombres', 'apellidos','ci','email_ula','email_alternativo','telefono_celular','escuela')
     list_filter = ('escuela','proyecto','tutor')
     search_fields = ['nombres','apellidos','ci']
     
 class ProfesorAdmin(admin.ModelAdmin):
-    list_display = ('nombres', 'apellidos','ci','email_ula','telefono','numero_induccion')
+    list_display = ('nombres', 'apellidos','ci','email_ula','telefono_celular','numero_induccion')
     list_filter = ('escuela','estatus','facultad','unidad_academica')
     search_fields = ['nombres','apellidos','ci','numero_induccion']
 
@@ -26,12 +26,12 @@ class ComunidadAdmin(admin.ModelAdmin):
     search_fields = ['nombre']
     
 class AsesorAdmin(admin.ModelAdmin):
-    list_display = ('nombres','apellidos','ci','cargo','email','telefono','telefono_celular')
+    list_display = ('nombres','ci','cargo','email','telefono_institucional','telefono_celular')
     search_fields = ['nombres','apellidos','ci']
 
 class ProyectoAdmin(admin.ModelAdmin):
     list_display = ("__str__","estatus","responsable")
-    list_filter = ("escuela","estatus")
+    list_filter = ("facultad_adscripcion","estatus","numero_acta_aprobacion","fecha_aprobacion")
     search_fields = ['codigo','titulo']
     
 admin.site.register(Semestre,SemestreAdmin)

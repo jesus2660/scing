@@ -12,9 +12,9 @@ class Escuela(models.Model):
     
 
 class Semestre(models.Model):
-    codido = models.CharField(max_length=6)
-    fecha_inicio = models.DateField()
-    fecha_final = models.DateField()
+    codigo = models.CharField(max_length=6)
+    fecha_inicio = models.DateField(blank=True,null=True)
+    fecha_final = models.DateField(blank=True,null=True)
     
     def __unicode__(self):
         return self.codido
@@ -61,7 +61,8 @@ class Estudiante(models.Model):
     ci = models.CharField(max_length=10,verbose_name="CI");
     email_ula = models.EmailField(blank=True)
     email_alternativo = models.EmailField()
-    telefono = models.CharField(max_length=11)
+    telefono_habitacion = models.CharField(max_length=11)
+    telefono_celular = models.CharField(max_length=11)
     escuela = models.ForeignKey(Escuela)
     semestre_induccion = models.ForeignKey(Semestre,related_name="induccion_est_set",blank=True,null=True)
     semestre_inscripcion = models.ForeignKey(Semestre,related_name="inscripccion_est_set",blank=True,null=True)
@@ -69,6 +70,7 @@ class Estudiante(models.Model):
     proyecto = models.ForeignKey("Proyecto",blank=True,null=True)
     tutor = models.ForeignKey("Profesor",blank=True,null=True)
     comunidad  = models.ForeignKey("Comunidad",blank=True,null=True)
+    asesor = models.ForeignKey("Asesor",blank=True,null=True)
     
     def __unicode__(self):
         return "%s %s" % (self.nombres, self.apellidos)
@@ -85,12 +87,13 @@ class Profesor(models.Model):
     ci = models.CharField(max_length=10,verbose_name="CI")
     escuela = models.ForeignKey(Escuela,blank=True,null=True)
     unidad_academica = models.ForeignKey(UnidadAcademica,blank=True,null=True)
-    facultad = models.ForeignKey(Facultad)
+    facultad = models.ForeignKey(Facultad,blank=True,null=True)
     numero_induccion = models.CharField(max_length=10,verbose_name="número de inducción")
     estatus = models.CharField(max_length=1, choices=ESTATUS_PROFESOR)
     email_ula = models.EmailField()
     email_alternativo = models.EmailField()
-    telefono = models.CharField(max_length=11)
+    telefono_oficina = models.CharField(max_length=11)
+    telefono_celular = models.CharField(max_length=11,blank=True)
     
     class Meta:
         verbose_name_plural = "Profesores"
@@ -99,13 +102,13 @@ class Profesor(models.Model):
         return "%s %s" % (self.nombres,self.apellidos)
 
 class Asesor(models.Model):
-    nombres = models.CharField(max_length=32)
-    apellidos = models.CharField(max_length=32)
-    ci = models.CharField(max_length=10,verbose_name="CI");
+    nombres = models.CharField(max_length=64)
+    ci = models.CharField(max_length=10,verbose_name="CI",blank=True);
     email = models.EmailField()
-    telefono = models.CharField(max_length=11)
+    telefono_institucional = models.CharField(max_length=11)
     telefono_celular = models.CharField(max_length=11)
     cargo = models.CharField(max_length=64)
+    comunidad = models.ForeignKey(Comunidad)
     
     class Meta:
         verbose_name_plural = "Asesores"
@@ -128,9 +131,8 @@ class Proyecto(models.Model):
     tutores = models.ManyToManyField(Profesor,related_name="tutor_set")
     fecha_aprobacion = models.DateField(verbose_name="fecha de aprobación")
     numero_acta_aprobacion = models.CharField(max_length=16)
-    escuela = models.ForeignKey(Escuela)
-    archivo = models.FileField(upload_to="proyectos")
-    asesor = models.ForeignKey(Asesor)
+    facultad_adscripcion = models.ForeignKey(Facultad)
+    archivo = models.FileField(upload_to="proyectos",blank=True,null=True)
     estatus = models.CharField(max_length=1, choices=ESTATUS_PROYECTO)
 
     def __unicode__(self):
