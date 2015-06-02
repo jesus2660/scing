@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'suit',
     'django.contrib.admin',
     'main',
+    'dbbackup'
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -119,3 +120,8 @@ SUIT_CONFIG = {
 MEDIA_ROOT = 'C:/Users/Jesus Gomez/Documents/SC'
 
 STATIC_ROOT = '/static/'
+
+#DBBACKUP settings
+DBBACKUP_BACKUP_DIRECTORY = 'C:\Users\Jesus Gomez\Documents\SC\backup'
+
+SEND_EMAIL = False

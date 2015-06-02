@@ -7,8 +7,11 @@
             <p><strong>Reporte:</strong>
             <ul>
             <li>{{students}} estudiantes importados a la base de datos</li>
-            {% for entry in log %}
+            {% for entry in success %}
                 <li>{{entry}}</li>
+            {% endfor %}
+            {% for entry in error %}
+                <li class="text-danger">{{entry}}</li>
             {% endfor %}
             </ul>
         </div>
