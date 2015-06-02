@@ -3,6 +3,7 @@ from django.contrib.admin.models import LogEntry, DELETION
 from django.core.urlresolvers import reverse
 from django.utils.html import escape
 
+from main.actions import unir_comunidades, unir_asesores
 from main.models import Semestre, Escuela, UnidadAcademica, Facultad, Comunidad, \
     Asesor, Profesor, Estudiante, Proyecto, Culminacion, Inscripcion, \
     Exoneracion, Aprobacion, Reestructuracion, Renovacion, Cierre
@@ -24,10 +25,12 @@ class ProfesorAdmin(admin.ModelAdmin):
 class ComunidadAdmin(admin.ModelAdmin):
     list_display = ('nombre','rif','sector','parroquia','municipio','estado')
     search_fields = ['nombre']
+    actions = [unir_comunidades]
     
 class AsesorAdmin(admin.ModelAdmin):
     list_display = ('nombres','ci','cargo','email','telefono_institucional','telefono_celular')
-    search_fields = ['nombres','apellidos','ci']
+    search_fields = ['nombres','ci','email']
+    actions = [unir_asesores]
 
 class ProyectoAdmin(admin.ModelAdmin):
     list_display = ("__str__","estatus","responsable")
