@@ -11,7 +11,7 @@ def unir_comunidades(modeladmin, request, queryset):
             asesor.save()
     for comunidad in queryset[1:len(queryset)]:
         comunidad.delete()
-unir_comunidades.short_description = "Unir Comunidades Selecionadas"
+unir_comunidades.short_description = "Unir Comunidades repetidas selecionadas"
 
 
 def unir_asesores(modeladmin, request, queryset):
@@ -24,4 +24,4 @@ def unir_asesores(modeladmin, request, queryset):
             estudiante.save()
     for asesor in queryset[1:len(queryset)]:
         asesor.delete()
-unir_asesores.short_description = "Unir Asesores Selecionadas"
+unir_asesores.short_description = "Unir Asesores repetidos selecionadas"
