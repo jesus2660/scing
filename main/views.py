@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from django.shortcuts import render
-from main.models import Proyecto
-from main.file_parser import handle_file_import
 from django.http.response import HttpResponseRedirect
+from django.shortcuts import render
+
+from main.file_parser import handle_file_import_total,\
+    handle_file_import_partial
 from main.forms import UploadFileForm
+from main.models import Proyecto
 
 
 def index(request):
@@ -32,17 +34,30 @@ def stats_yearly(request):
     return render(request,'yearly.html',{"proyectos":proyectos})
 
 def import_data(request):
+    return render(request, 'import.html',{})
+
+def import_total(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST,request.FILES)
         if form.is_valid():
-            data = handle_file_import(request.FILES['file'])
+            data = handle_file_import_total(request.FILES['file'])
             request.session["data"]=data
             return HttpResponseRedirect('/importar/reporte/')
     else:
         form = UploadFileForm()
-    return render(request, 'import.html', {"form":form})
+    return render(request, 'import_total.html', {"form":form})
+
+def import_partial(request):
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST,request.FILES)
+        if form.is_valid():
+            data = handle_file_import_partial(request.FILES['file'])
+            request.session["data"]=data
+            return HttpResponseRedirect('/importar/reporte/')
+    else:
+        form = UploadFileForm()
+    return render(request, 'import_partial.html', {"form":form})
 
 def import_data_report(request):
     data = request.session["data"]
-    del request.session["data"]
     return render(request,'import_report.html',data)

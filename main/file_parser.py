@@ -18,7 +18,7 @@ def clean_phone(token):
     
     return token
 
-def handle_file_import(f):
+def handle_file_import_total(f):
     """importa el archivo suministrado a la base de datos"""
     path = os.path.join(MEDIA_ROOT, 'tsv')
     if not os.path.exists(path):
@@ -161,6 +161,95 @@ def handle_file_import(f):
                                                            telefono_institucional=clean_phone(tokens[29]),
                                                            telefono_celular=clean_phone(tokens[30]),
                                                            cargo=tokens[32],
+                                                           comunidad=comunidad)
+            estudiante.asesor = asesor
+            estudiante.save()
+            if created:
+                report_data["success"].append("Agregado asesor comunitario \"%s\" (recuerde verificar si los datos son correctos)" % asesor.nombres)
+
+            i += 1
+        report_data["students"] = i
+    return report_data
+
+
+def handle_file_import_partial(f):
+    """importa el archivo suministrado a la base de datos"""
+    path = os.path.join(MEDIA_ROOT, 'tsv')
+    if not os.path.exists(path):
+        os.mkdir(path)
+        
+    report_data = {"success":[],"warning":[],"error":[], "filename":f.name}
+    
+    filename = os.path.join(MEDIA_ROOT, 'tsv', f.name)
+    
+    with open(filename, 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
+        destination.close()
+        
+    
+    with open(filename, "r") as data:
+        
+        lines = data.readlines()
+        i = 0
+        for line in lines[1:len(lines)]:
+
+            line = line.decode("utf-8")
+            
+            tokens = line.split('\t')
+            
+            if len(tokens) is not 24:
+                report_data["error"].append("linea %s malformada, la siguiente linea fue omitida: %s" % (i,line))
+                continue
+            
+            
+            # CREAR ESTUDIANTES
+            estudiante = Estudiante(nombres=tokens[1],
+                                    apellidos=tokens[2],
+                                    ci=tokens[3],
+                                    telefono_habitacion=clean_phone(tokens[4]),
+                                    telefono_celular=clean_phone(tokens[5]),
+                                    email_ula=tokens[6],
+                                    email_alternativo=tokens[7],
+                                    )
+            
+            # ESCUELA
+            estudiante.escuela = Escuela.objects.get(nombre=tokens[8])
+            estudiante.semestre_induccion = Semestre.objects.get(codigo=tokens[9])
+                
+            # TUTOR
+            profesor = Profesor.objects.get(numero_induccion=tokens[10])
+            estudiante.tutor = profesor
+                
+            # PROYECTO
+            codigo = tokens[11][0:4]
+            titulo = tokens[11][6:len(tokens[11])]
+            
+            proyecto = Proyecto.objects.get(titulo=titulo)
+            estudiante.proyecto = proyecto
+
+            # COMUNIDAD Y ASESOR COMUNITARIO
+            comunidad = None
+            if not Comunidad.objects.filter(nombre=tokens[12],rif=tokens[13]):
+                comunidad = Comunidad(nombre=tokens[12],
+                                      rif=tokens[13],
+                                      sector=tokens[14],
+                                      parroquia=tokens[15],
+                                      municipio=tokens[16],
+                                      estado=tokens[17],
+                )
+                comunidad.save()
+                report_data["success"].append("Agregada comunidad \"%s\"" % comunidad.nombre)
+                estudiante.comunidad = comunidad
+            else:
+                comunidad = Comunidad.objects.get(nombre=tokens[12],rif=tokens[13])
+                estudiante.comunidad = comunidad 
+                
+            asesor, created = Asesor.objects.get_or_create(nombres=tokens[18],
+                                                           email=tokens[21],
+                                                           telefono_institucional=clean_phone(tokens[19]),
+                                                           telefono_celular=clean_phone(tokens[20]),
+                                                           cargo=tokens[22],
                                                            comunidad=comunidad)
             estudiante.asesor = asesor
             estudiante.save()

@@ -4,85 +4,16 @@
     <div class="container">
         <h3>Importar datos</h3>
         <div class="well" role="alert">
-            <p><strong>Instrucciones de uso:</strong>
-            Seleccione un archivo para importar datos al sistema</p>
-            <p>
-            <strong>ADVERTENCIA:</strong>
-             No se pueden deshacer los cambios despues de subir un archivo a la
-             base de datos, asegurese de que los datos son correctos antes de importar.</span>
-            </p>
-        </div>
-        <hr>
-        
-        <form class="form-inline" method="POST" enctype="multipart/form-data">
-            <legend>Importar datos de estudiantes</legend>
-            {% if form.errors %}
-            <div class="alert alert-danger" role="alert"><strong>Por favor corrija los errores a continuacion:</strong>
-                {{ form.errors }}
-            </div>
-            {% endif %}
-            <p>El archivo debe contener los siguientes campos EN FORMATO CSV:</p>
+            Opciones para importar datos:
             <ol>
-                <li>Marca Temporal.</li>
-                <li>Del estudiante:
-                    <ol>
-                        <li>Apellidos.</li>
-                        <li>Nombres.</li>
-                        <li>Cedula de Identidad.</li>
-                        <li>Telefono de habitacion.</li>
-                        <li>Telefono celular.</li>
-                        <li>Email ULA.</li>
-                        <li>Email alternativo.</li>
-                        <li>Carrera.</li>
-                        <li>Semestre de Induccion.</li>
-                    </ol>
-                </li>
-                <li>Del tutor:
-                    <ol>
-                        <li>Apellidos y Nombres.</li>
-                        <li>Cedula de Identidad.</li>
-                        <li>Telefono de oficina.</li>
-                        <li>Telefono celular.</li>
-                        <li>Email ULA.</li>
-                        <li>Email alternativo.</li>
-                        <li>Carrera.</li>
-                        <li>Numero de Induccion.</li>
-                    </ol>
-                </li>
-                <li>Del proyecto:
-                    <ol>
-                        <li>Titulo.</li>
-                        <li>Facultad de Adscripción.</li>
-                        <li>Fecha de Aprovación.</li>
-                        <li>N° de Acta CCSC.</li>
-                    </ol>
-                </li>
-                <li>De la Comunidad
-                    <ol>
-                        <li>Nombre de la comunidad o institucion.</li>
-                        <li>RIF.</li>
-                        <li>Sector.</li>
-                        <li>Parroquia.</li>
-                        <li>Municipio.</li>
-                        <li>Estado.</li>
-                        <li>Nombre del Supervisor.</li>
-                        <li>Telefono institucional.</li>
-                        <li>Telefono celular.</li>
-                        <li>Email.</li>
-                        <li>Cargo.</li>
-                    </ol>
-                </li>  
-            </ol>  
-            <br>
-            <div class="form-group">
-                <label for="file">Archivo</label>
-                <input type="file" class="form-control" id="file" name="file">
-            </div>
-            {% csrf_token %}
-            <button type="submit" class="btn btn-default">Importar</button>
-        </form>
+                <li>Importe total: el programa intentará agregar los estudiantes con todos sus datos y creará todos los campos necesarios según la información dada en el archivo</li>
+                <li>Importe total: el programa solo insertará nuevos estudiantes, comunidades y asesores comunitarios y asumirá que los proyectos, tutores, semestres y facultades correspondientes ya están creadas en la base de datos.</li>
+            </ol>
+        </div>
+        <p class="text-center">
+          <a href="/importar/total/" class="btn btn-primary btn-lg">Importe Total</a>
+          <a href="/importar/parcial/" class="btn btn-default btn-lg">Importe Parcial</a>
+        </p>
         <hr>
-        <div class="alert alert-warning" role="alert"><strong>ADVERTENCIA:</strong> la importacion fallará o quedará incompleta si el archivo es incorrecto o está mal formado.</div>
-        
     </div>
 {% endblock %}
