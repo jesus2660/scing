@@ -187,7 +187,7 @@ class Exoneracion(models.Model):
     
 class Aprobacion(models.Model):
     fecha = models.DateField()
-    formato_proyecto = models.FileField(upload_to="proyectos")
+    formato_proyecto = models.FileField(upload_to="proyectos/aprobaciones",blank=True)
     proyecto = models.ForeignKey(Proyecto)
     
     class Meta:
@@ -196,8 +196,8 @@ class Aprobacion(models.Model):
 
 class Renovacion(models.Model):
     fecha = models.DateField()
-    formato_proyecto = models.FileField(upload_to="proyectos")
-    informe_tutor = models.FileField(upload_to="proyectos")
+    formato_proyecto = models.FileField(upload_to="proyectos/renovaciones/",blank=True)
+    informe_tutor = models.FileField(upload_to="proyectos/renovaciones/",blank=True)
     proyecto = models.ForeignKey(Proyecto)
     
     class Meta:
@@ -206,8 +206,8 @@ class Renovacion(models.Model):
     
 class Reestructuracion(models.Model):
     fecha = models.DateField()
-    formato_proyecto = models.FileField(upload_to="proyectos")
-    informe_tutor = models.FileField(upload_to="proyectos")
+    formato_proyecto = models.FileField(upload_to="proyectos/reestructuraciones/",blank=True)
+    informe_tutor = models.FileField(upload_to="proyectos/reestructuraciones/",blank=True)
     proyecto = models.ForeignKey(Proyecto)
     
     class Meta:
@@ -215,6 +215,6 @@ class Reestructuracion(models.Model):
 
 class Cierre(models.Model):
     fecha = models.DateField()
-    formato_proyecto = models.FileField(upload_to="proyectos")
-    informe_cierre = models.FileField(upload_to="proyectos")
+    formato_proyecto = models.FileField(upload_to="proyectos/cierres/",blank=True)
+    informe_cierre = models.FileField(upload_to="proyectos/cierres/",blank=True)
     proyecto = models.ForeignKey(Proyecto)

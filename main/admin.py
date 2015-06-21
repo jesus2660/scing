@@ -3,7 +3,8 @@ from django.contrib.admin.models import LogEntry, DELETION
 from django.core.urlresolvers import reverse
 from django.utils.html import escape
 
-from main.actions import unir_comunidades, unir_asesores
+from main.actions import unir_comunidades, unir_asesores, marcar_cerrado,\
+    marcar_renovado
 from main.models import Semestre, Escuela, UnidadAcademica, Facultad, Comunidad, \
     Asesor, Profesor, Estudiante, Proyecto, Culminacion, Inscripcion, \
     Exoneracion, Aprobacion, Reestructuracion, Renovacion, Cierre
@@ -36,6 +37,7 @@ class ProyectoAdmin(admin.ModelAdmin):
     list_display = ("__str__","estatus","responsable")
     list_filter = ("facultad_adscripcion","estatus","numero_acta_aprobacion","fecha_aprobacion")
     search_fields = ['codigo','titulo']
+    actions = [marcar_cerrado,marcar_renovado]
     
 admin.site.register(Semestre,SemestreAdmin)
 admin.site.register(Escuela)
@@ -47,13 +49,40 @@ admin.site.register(Profesor,ProfesorAdmin)
 admin.site.register(Estudiante,EstudianteAdmin)
 admin.site.register(Proyecto,ProyectoAdmin)
 
+
+#se registra un cierre admin para marcar el proyecto relacionado como cerrado cuando se cree un objeto de este tipo.
+class CierreAdmin(admin.ModelAdmin):
+    def save_model(self, request, obj, form, change):
+            obj.proyecto.estatus = "C"
+            obj.proyecto.save()
+            obj.save()
+            
+    list_display = ('proyecto','fecha')
+    
+    
+class RenovacionAdmin(admin.ModelAdmin):
+    def save_model(self, request, obj, form, change):
+            obj.proyecto.estatus = "R"
+            obj.proyecto.save()
+            obj.save()
+            
+    list_display = ('proyecto','fecha')
+    
+    
+class ReestructuracionAdmin(admin.ModelAdmin):
+    list_display = ('proyecto','fecha')
+    
+class AprobacionAdmin(admin.ModelAdmin):
+    list_display = ('proyecto','fecha')
+
 admin.site.register(Culminacion)
 admin.site.register(Inscripcion)
 admin.site.register(Exoneracion)
-admin.site.register(Aprobacion)
-admin.site.register(Reestructuracion)
-admin.site.register(Renovacion)
-admin.site.register(Cierre)
+
+admin.site.register(Aprobacion,AprobacionAdmin)
+admin.site.register(Reestructuracion,ReestructuracionAdmin)
+admin.site.register(Renovacion,RenovacionAdmin)
+admin.site.register(Cierre,CierreAdmin)
 
 
 

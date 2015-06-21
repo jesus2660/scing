@@ -25,3 +25,18 @@ def unir_asesores(modeladmin, request, queryset):
     for asesor in queryset[1:len(queryset)]:
         asesor.delete()
 unir_asesores.short_description = "Unir Asesores repetidos selecionadas"
+
+
+def marcar_renovado(modeladmin, request, queryset):
+
+    for proyecto in queryset:
+        proyecto.estatus = "R"
+        proyecto.save()
+marcar_renovado.short_description = "Marcar Proyecto como Renovado"
+
+def marcar_cerrado(modeladmin, request, queryset):
+
+    for proyecto in queryset:
+        proyecto.estatus = "C"
+        proyecto.save()
+marcar_cerrado.short_description = "Marcar Proyecto como Cerrado"

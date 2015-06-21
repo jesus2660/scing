@@ -4,31 +4,290 @@
     <div class="container">
         <h3>Informe anual {{year}}</h3>
         <hr>
-        <h4>Proyectos</h4>
-        Totales = {{proyectos.count}}
+        <h4>Proyectos Activos en el {{year}}</h4>
+        <p>En el año {{year}} fueron aprobados, por la Comisión Central de Servicio Comunitario de la ULA, un total de {{proyectos.count}} proyectos de la Facultad de Ingeniería.</p>
         <table class="table table-bordered table-hover">
             <thead>
                 <tr>
                     <th  class="text-center">N°</th>
                     <th  class="text-center">Proyecto</th>
-                    <th  class="text-center">Aprovado/Renovado</th>
-                    <th  class="text-center">Facultad de Adscripcion</th>
+                    <th  class="text-center">Estatus</th>
+                    <th  class="text-center">Facultad</th>
                     <th  class="text-center">Profesor Responsable</th>
                 </tr>
             </thead>
             <tbody>
                 {% for proyecto in proyectos %}
                 <tr>
-                    <td>{{forloop.counter}}</td>
-                    <td>{{proyecto.titulo}}</td>
-                    <td>{{proyecto.estatus}}</td>
-                    <td>{{proyecto.facultad_adscripcion}}</td>
-                    <td>{{proyecto.responsable}}</td>
+                    <td><small>{{forloop.counter}}</small></td>
+                    <td><small>{{proyecto.titulo}}</small></td>
+                    <td><small>{{proyecto.estatus}}</small></td>
+                    <td><small>{{proyecto.facultad_adscripcion}}</small></td>
+                    <td><small>{{proyecto.responsable}}</small></td>
                 </tr>
                 {% endfor %}
 
             </tbody>
         </table>
         <hr>
+        {{a}} {{b}}
+        <p>En el año {{year}} se aprobó un total de {{proyectos.count}} proyectos de la Facultad de Ingeniería: {{nuevos}} nuevos ({{porcentaje_nuevos}}%) y {{renovados}} renovaciones ({{porcentaje_renovados}}%).
+         <div id="grafica-1"></div>
+         
+         <h4> Proyectos por facultad de adscripcion</h4>
+         
+         <div id="grafica-2"></div>
+         
+         <h4> Proyectos ofertados por unidad academica </h4>
+         
+         FALTA INFORMACION
+         
+         <h4> Proyectos ofertados por carrera </h4>
+         
+         <div id="grafica-3"></div>
+         
+         <h4> Numero de responsables por unidad academina </h4>
+         
+         <div id="grafica-4"></div>
+         
+         <h4>Numero de proyectos por responsables </h4>
+         
+         <div id="grafica-5"></div>
+         
+         <h4>Estadisticas de proyectos culminados:</h4>
+         
+        
     </div>
+    
+    <script src="{{STATIC_PREFIX}}js/jquery.min.js"></script>
+    <script src="{{STATIC_PREFIX}}highcharts/js/highcharts.js"></script>
+    <script src="{{STATIC_PREFIX}}highcharts/js/modules/exporting.js"></script>
+    
+    <script type="text/javascript">
+    $(function () {
+        $('#grafica-1').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Porcentaje de Proyectos Nuevos y Renovados'
+            },
+            xAxis: {
+                categories: [
+                    'Nuevos','Renovados'
+                ]
+            },
+            yAxis: {
+                min: 0,
+                max: 100,
+                title: {
+                    text: 'Porcentaje (%)'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f} %</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            credits: {
+                enabled: false
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+            name: 'Proyectos nuevos y renovados',
+            data: [{{porcentaje_nuevos}},{{porcentaje_renovados}}]
+            }
+            ]
+        });
+    });
+
+        
+        $(function () {
+    $('#grafica-2').highcharts({
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false
+        },
+        title: {
+            text: 'Proyectos por facultad de adscripcion'
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                    }
+                }
+            }
+        },
+        series: [{
+            type: 'pie',
+            name: 'Facultad de adscripcion',
+            data: [
+                {% for facultad in facultades %}
+                ['{{facultad.0}}',{{facultad.1}}]{% if not forloop.last %},{% endif %}
+                {% endfor %}
+            ]
+        }]
+    });
+});
+
+        $(function () {
+    $('#grafica-3').highcharts({
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false
+        },
+        title: {
+            text: 'Proyectos ofertados por carrera'
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                    }
+                }
+            }
+        },
+        series: [{
+            type: 'pie',
+            name: 'Facultad de adscripcion',
+            data: [
+                {% for carrera,porcentaje in oferta_por_carreras.items %}
+                ['{{carrera}}',{{porcentaje}}]{% if not forloop.last %},{% endif %}
+                {% endfor %}
+            ]
+        }]
+    });
+});
+
+$(function () {
+        $('#grafica-4').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Responsables de proyecto por escuela'
+            },
+            xAxis: {
+                categories: [
+                    {% for escuela in responsables_por_escuela.keys %}
+                    '{{escuela}}'{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                ]
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Numero de responsables'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            credits: {
+                enabled: false
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+            name: 'Numero de responsables',
+            data: [{% for responsables in responsables_por_escuela.values %}
+                    {{responsables}}{% if not forloop.last %},{% endif %}
+                    {% endfor %}]
+            }
+            ]
+        });
+    });
+    
+$(function () {
+        $('#grafica-5').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Numero de proyectos por responsable'
+            },
+            xAxis: {
+                categories: [
+                    {% for tupla in profesores_responsables %}
+                    '{{tupla.0.nombres}} {{tupla.0.apellidos}}'{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                ],
+                labels: {
+                rotation: -45,
+                }
+
+                
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Numero de proyectos'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            credits: {
+                enabled: false
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+            name: 'Numero de proyectos',
+            data: [{% for tupla in profesores_responsables %}
+                    {{tupla.1}}{% if not forloop.last %},{% endif %}
+                    {% endfor %}]
+            }
+            ]
+        });
+    });
+</script>
+    
+    
+    
 {% endblock %}
