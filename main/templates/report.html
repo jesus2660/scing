@@ -4,24 +4,29 @@
     <div class="container">
         <h3>Informe anual {{year}}</h3>
         <hr>
+        <h4>Proyectos</h4>
+        Totales = {{proyectos.count}}
         <table class="table table-bordered table-hover">
             <thead>
                 <tr>
                     <th  class="text-center">N°</th>
                     <th  class="text-center">Proyecto</th>
-                    <th  class="text-center">Nuevo/Renovado</th>
+                    <th  class="text-center">Aprovado/Renovado</th>
+                    <th  class="text-center">Facultad de Adscripcion</th>
                     <th  class="text-center">Profesor Responsable</th>
                 </tr>
             </thead>
             <tbody>
+                {% for proyecto in proyectos %}
                 <tr>
-                    {% for proyecto in proyectos %}
-                    <td>{{forloop.i}}</td>
-                    <td>{{proyecto.title}}</td>
-                    <td>{{proyecto.status}}</td>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{proyecto.titulo}}</td>
+                    <td>{{proyecto.estatus}}</td>
+                    <td>{{proyecto.facultad_adscripcion}}</td>
                     <td>{{proyecto.responsable}}</td>
-                    {% endfor %}
                 </tr>
+                {% endfor %}
+
             </tbody>
         </table>
         <hr>

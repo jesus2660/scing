@@ -27,11 +27,14 @@ def stats(request):
     estadisticas disponibles a partir de la informacion de la base de datos"""
     return render(request,'stats.html',{})
 
-def stats_yearly(request):
+def report(request):
     """retira todos los proyectos activos (nuevos y renovados) durante el año
     seleccionado y genera las tablas y estadisticas del informe de gestion anual"""
     proyectos = Proyecto.objects.all().exclude(estatus="C")
-    return render(request,'yearly.html',{"proyectos":proyectos})
+    return render(request,'report.html',{"proyectos":proyectos})
+
+def memory(request):
+    pass
 
 def import_data(request):
     return render(request, 'import.html',{})
