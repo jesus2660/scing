@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.utils.html import escape
 
 from main.actions import unir_comunidades, unir_asesores, marcar_cerrado,\
-    marcar_renovado
+    marcar_renovado, marcar_como_culminado
 from main.models import Semestre, Escuela, UnidadAcademica, Facultad, Comunidad, \
     Asesor, Profesor, Estudiante, Proyecto, Culminacion, Inscripcion, \
     Exoneracion, Aprobacion, Reestructuracion, Renovacion, Cierre
@@ -14,9 +14,10 @@ class SemestreAdmin(admin.ModelAdmin):
     list_display = ("codigo","fecha_inicio","fecha_final")
 
 class EstudianteAdmin(admin.ModelAdmin):
-    list_display = ('nombres', 'apellidos','ci','email_ula','email_alternativo','telefono_celular','escuela')
+    list_display = ('nombres', 'apellidos','ci','email_ula','email_alternativo','telefono_celular','escuela','estatus')
     list_filter = ('escuela','proyecto','tutor')
     search_fields = ['nombres','apellidos','ci']
+    actions = [marcar_como_culminado]
     
 class ProfesorAdmin(admin.ModelAdmin):
     list_display = ('nombres', 'apellidos','ci','email_ula','telefono_celular','numero_induccion')

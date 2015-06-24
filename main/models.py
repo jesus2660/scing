@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
+from django.db.models.aggregates import Max
+
 
 class TruncatingCharField(models.CharField):
     def get_prep_value(self, value):
@@ -25,7 +27,7 @@ class Semestre(models.Model):
     
     def __unicode__(self):
         return self.codigo
-    
+
 
 class UnidadAcademica(models.Model):
     nombre = TruncatingCharField(max_length=64);
@@ -62,6 +64,11 @@ class Comunidad(models.Model):
         return self.nombre
     
 
+ESTATUS_ESTUDIANTE = (
+    ("I", 'Inscrito'),
+    ("C", 'Culminado'),
+) 
+
 class Estudiante(models.Model):
     nombres = TruncatingCharField(max_length=32)
     apellidos = TruncatingCharField(max_length=32)
@@ -78,6 +85,7 @@ class Estudiante(models.Model):
     tutor = models.ForeignKey("Profesor",blank=True,null=True)
     comunidad  = models.ForeignKey("Comunidad",blank=True,null=True)
     asesor = models.ForeignKey("Asesor",blank=True,null=True)
+    estatus = models.CharField(max_length=1, choices=ESTATUS_ESTUDIANTE,default="I")
     
     def __unicode__(self):
         return "%s %s" % (self.nombres, self.apellidos)

@@ -41,7 +41,7 @@ INSTALLED_APPS = (
     'suit',
     'django.contrib.admin',
     'main',
-    'dbbackup'
+    'dbbackup',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -95,6 +95,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+#Configuracion de Django Suit
 SUIT_CONFIG = {
     'ADMIN_NAME': 'SCIng Admin v-0.4',
     'HEADER_DATE_FORMAT': 'l, j F Y', # Saturday, 16 March 2013
@@ -119,9 +120,9 @@ SUIT_CONFIG = {
 
 MEDIA_ROOT = 'C:/Users/Jesus Gomez/Documents/SC'
 
-STATIC_ROOT = '/static/'
+STATIC_ROOT = 'C:/Users/Jesus Gomez/wokspace/SCIng/static/'
 
 #DBBACKUP settings
-DBBACKUP_BACKUP_DIRECTORY = 'C:\Users\Jesus Gomez\Documents\SC\backup'
+DBBACKUP_BACKUP_DIRECTORY = os.path.join(MEDIA_ROOT,'backup')
 
 SEND_EMAIL = False

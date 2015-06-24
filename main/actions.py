@@ -1,3 +1,4 @@
+from main.models import Culminacion
 def unir_comunidades(modeladmin, request, queryset):
     if len(queryset)<2:
         return
@@ -40,3 +41,9 @@ def marcar_cerrado(modeladmin, request, queryset):
         proyecto.estatus = "C"
         proyecto.save()
 marcar_cerrado.short_description = "Marcar Proyecto como Cerrado"
+
+def marcar_como_culminado(modeladmin,request,queryset):
+    for estudiante in queryset:
+        estudiante.estatus = "C"
+        estudiante.save()
+marcar_como_culminado.short_description = "Marcar Estudiante como Culminado"
