@@ -167,6 +167,7 @@ class Culminacion(models.Model):
     fecha_csscfi_ccscula = models.DateField(verbose_name="Fecha de trámite CSSCFI ante CCSCULA")
     numero_oficio = TruncatingCharField(max_length=16,verbose_name="número de oficio")
     estatus = TruncatingCharField(max_length=1, choices=ESTATUS_CULMINACION)
+    fecha = models.DateField(verbose_name="Fecha de culminacion",blank=True,null=True)
     
     class Meta:
         verbose_name_plural = "Culminaciones"

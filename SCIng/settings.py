@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'autocomplete_light',
     'suit',
     'django.contrib.admin',
     'main',

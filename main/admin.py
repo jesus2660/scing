@@ -18,6 +18,7 @@ class EstudianteAdmin(admin.ModelAdmin):
     list_filter = ('escuela','proyecto','tutor')
     search_fields = ['nombres','apellidos','ci']
     actions = [marcar_como_culminado]
+    raw_id_fields = ('proyecto','tutor','comunidad')
     
 class ProfesorAdmin(admin.ModelAdmin):
     list_display = ('nombres', 'apellidos','ci','email_ula','telefono_celular','numero_induccion')
@@ -33,12 +34,14 @@ class AsesorAdmin(admin.ModelAdmin):
     list_display = ('nombres','ci','cargo','email','telefono_institucional','telefono_celular')
     search_fields = ['nombres','ci','email']
     actions = [unir_asesores]
+    raw_id_fields = ['comunidad']
 
 class ProyectoAdmin(admin.ModelAdmin):
     list_display = ("__str__","estatus","responsable")
     list_filter = ("facultad_adscripcion","estatus","numero_acta_aprobacion","fecha_aprobacion")
     search_fields = ['codigo','titulo']
     actions = [marcar_cerrado,marcar_renovado]
+    raw_id_fields = ['responsable','tutores']
     
 admin.site.register(Semestre,SemestreAdmin)
 admin.site.register(Escuela)
@@ -75,8 +78,11 @@ class ReestructuracionAdmin(admin.ModelAdmin):
     
 class AprobacionAdmin(admin.ModelAdmin):
     list_display = ('proyecto','fecha')
+    
+class CulminacionAdmin(admin.ModelAdmin):
+    raw_id_fields = ['estudiante']
 
-admin.site.register(Culminacion)
+admin.site.register(Culminacion,CulminacionAdmin)
 admin.site.register(Inscripcion)
 admin.site.register(Exoneracion)
 
