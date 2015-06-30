@@ -2,9 +2,9 @@
 
 {% block content %}
     <div class="container">
-        <h3>Informe anual {{year}}</h3>
+        <h2>Informe anual {{year}}</h2>
         <hr>
-        <h4>Proyectos Activos en el {{year}}</h4>
+        <h3>Proyectos Activos en el {{year}}</h3>
         <p>En el año {{year}} fueron aprobados, por la Comisión Central de Servicio Comunitario de la ULA, un total de {{proyectos.count}} proyectos de la Facultad de Ingeniería.</p>
         <table class="table table-bordered table-hover">
             <thead>
@@ -38,10 +38,6 @@
          
          <div id="grafica-2"></div>
          
-         <h4> Proyectos ofertados por unidad academica </h4>
-         
-         FALTA INFORMACION
-         
          <h4> Proyectos ofertados por carrera </h4>
          
          <div id="grafica-3"></div>
@@ -54,7 +50,58 @@
          
          <div id="grafica-5"></div>
          
-         <h4>Estadisticas de proyectos culminados:</h4>
+         <h3>Estadisticas de proyectos culminados:</h3>
+         <ul>
+         <li>Estudiantes que culminaron: {{num_culminaciones}} </li>
+         <li>Proyectos Ejecutados: {{proyectos_ejecutados|length}}</li>
+         <li>Tutores de Proyectos ejecutados: {{tutores_de_proyectos_ejecutados|length}}</li>
+         <li>Comunidades atendidas: {{comunidades_atendidas|length}}</li>
+         <li>Semestres cursados en el 2014: {%for semestre in semestres_cursados %}{{semestre}}   {% endfor %}</li>
+         </ul>
+         
+         <h4>Tutores Activos</h4>
+         <table class="table table-bordered table-hover">
+         <thead>
+            <tr>
+                <th>N°</th>
+                <th>Tutor</th>
+                <th>Carrera</th>
+                <th>Numero de proyectos</th>
+                <th>Numero de estudiantes</th>
+            </tr>
+         </thead>
+         <tbody>
+         {% for tutor in tutores_de_proyectos_ejecutados %}
+            <tr>
+                <th>{{forloop.counter}}</th>
+                <th>{{tutor}}</th>
+                <th>?</th>
+                <th>?</th>
+                <th>?</th>
+            <tr>
+         {% endfor %}
+         </tbody>
+         </table>
+         
+         <h4>Estudiantes por proyecto</h4>
+         
+         <div id="grafica-6"></div>
+         
+         <h4>Tutores por escuela</h4>
+         
+         <div id="grafica-7"></div>
+         
+         <h4>Estudiantes que culminaron</h4>
+         
+         <div id="grafica-8"></div>
+         <div id="grafica-9"></div>
+         
+         <h4>Resumen de ejecución</h4>
+         
+         <div id="grafica-10"></div>
+         
+         
+         
          
         
     </div>
@@ -281,6 +328,150 @@ $(function () {
             name: 'Numero de proyectos',
             data: [{% for tupla in profesores_responsables %}
                     {{tupla.1}}{% if not forloop.last %},{% endif %}
+                    {% endfor %}]
+            }
+            ]
+        });
+    });
+    
+$(function () {
+    $('#grafica-6').highcharts({
+    chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Estudiantes por proyecto'
+            },
+            xAxis: {
+                categories: [
+                    {% for proyecto in proyectos_ejecutados %}
+                    '{{proyecto.codigo}}'{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                ]
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Numero de estudiantes'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            credits: {
+                enabled: false
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+            name: 'Codigo del Proyecto',
+            data: [{% for proyecto in proyectos_ejecutados %}
+                    {{proyecto.estudiante_set.all|length}}{% if not forloop.last %},{% endif %}
+                    {% endfor %}]
+            }
+            ]
+        });
+    });
+    
+    $(function () {
+    $('#grafica-7').highcharts({
+    chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Tutores por proyecto'
+            },
+            xAxis: {
+                categories: [
+                    {% for key in tutores_por_escuela %}
+                    '{{key.nombre}}'{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                ]
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Numero de tutores'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            credits: {
+                enabled: false
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+            name: 'Codigo del Proyecto',
+            data: [{% for value in tutores_por_escuela.values %}
+                    {{value}}{% if not forloop.last %},{% endif %}
+                    {% endfor %}]
+            }
+            ]
+        });
+    });
+    
+    $(function () {
+    $('#grafica-8').highcharts({
+    chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Estudiantes culminados'
+            },
+            xAxis: {
+                categories: [
+                    {% for key in estudiantes_por_escuela.keys %}
+                    '{{key.nombre}}'{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                ]
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Numero de estudiantes'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            credits: {
+                enabled: false
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+            name: 'Estudiantes',
+            data: [{% for value in estudiantes_por_escuela.values %}
+                    {{value}}{% if not forloop.last %},{% endif %}
                     {% endfor %}]
             }
             ]

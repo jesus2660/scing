@@ -4,10 +4,11 @@
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render
 
-from main.file_parser import handle_file_import_total,\
+from main.file_parser import handle_file_import_total, \
     handle_file_import_partial
 from main.forms import UploadFileForm
-from main.models import Proyecto, Facultad, Profesor, Escuela
+from main.models import Proyecto, Facultad, Profesor, Escuela, Culminacion, \
+    Semestre, Estudiante
 
 
 def index(request):
@@ -33,6 +34,7 @@ def report(request):
     render_data = {}
     year = request.GET["year"]
     render_data["year"]=year
+    
     #excluimos los proyectos cerrados estatus="C"
     proyectos = Proyecto.objects.all().exclude(estatus="C")
     render_data["proyectos"]=proyectos
@@ -79,6 +81,44 @@ def report(request):
             profesores.append((profesor,count))
     
     render_data["profesores_responsables"]=profesores
+    
+    culminaciones = Culminacion.objects.filter(fecha__year=year)
+    num_culminaciones = len(culminaciones)
+    proyectos_ejecutados = []
+    tutores_de_proyectos_ejecutados = []
+    comunidades_atendidas = []
+    
+    #tomamos los semestres que se hayan cursado durante el año elegido
+    semestres_cursados = Semestre.objects.filter(fecha_final__gt='%s-01-01'%year).exclude(fecha_inicio__gt='%s-12-31'%year)
+    
+    estudiantes_por_escuela = {}
+    tutores_por_escuela = {}
+    for escuela in Escuela.objects.all():
+        estudiantes_por_escuela[escuela]= 0
+        tutores_por_escuela[escuela]=0
+        
+    for culminacion in culminaciones:
+        proyecto = culminacion.estudiante.proyecto
+        if not proyecto in proyectos_ejecutados:
+            proyectos_ejecutados.append(proyecto)
+        profesor = culminacion.estudiante.tutor
+        escuela = culminacion.estudiante.escuela
+        estudiantes_por_escuela[escuela]+=1
+        if not profesor in tutores_de_proyectos_ejecutados:
+            tutores_de_proyectos_ejecutados.append(profesor)
+            tutores_por_escuela[profesor.escuela]+=1
+        comunidad = culminacion.estudiante.comunidad
+        if not comunidad in comunidades_atendidas:
+            comunidades_atendidas.append(comunidad)
+        
+    
+    render_data.update({"num_culminaciones":num_culminaciones,
+                        "proyectos_ejecutados":proyectos_ejecutados,
+                        "tutores_de_proyectos_ejecutados":tutores_de_proyectos_ejecutados,
+                        "comunidades_atendidas":comunidades_atendidas,
+                        "semestres_cursados":semestres_cursados,
+                        "estudiantes_por_escuela":estudiantes_por_escuela,
+                        "tutores_por_escuela": tutores_por_escuela})
     
     return render(request,'report.html',render_data)
     
