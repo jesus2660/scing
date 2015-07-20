@@ -89,27 +89,45 @@ def report(request):
     comunidades_atendidas = []
     
     #tomamos los semestres que se hayan cursado durante el año elegido
-    semestres_cursados = Semestre.objects.filter(fecha_final__gt='%s-01-01'%year).exclude(fecha_inicio__gt='%s-12-31'%year)
-    
+    semestres_cursados = Semestre.objects.filter(fecha_final__gt='%s-01-01'%year).exclude(fecha_inicio__gt='%s-12-31'%year).order_by("fecha_inicio")
+    semestre_data = {}
     estudiantes_por_escuela = {}
+    estudiantes_por_semestre_escuela = {}
+    
+    for semestre in semestres_cursados:
+        estudiantes_por_semestre_escuela[semestre]={}
+        semestre_data[semestre]=[0,0,0,0]
+        for escuela in Escuela.objects.all():
+            estudiantes_por_semestre_escuela[semestre][escuela]=0
+        
     tutores_por_escuela = {}
     for escuela in Escuela.objects.all():
         estudiantes_por_escuela[escuela]= 0
         tutores_por_escuela[escuela]=0
         
+        
     for culminacion in culminaciones:
+        semestre_data[semestre][2]+=1
         proyecto = culminacion.estudiante.proyecto
+        semestre = culminacion.semestre
+        
         if not proyecto in proyectos_ejecutados:
             proyectos_ejecutados.append(proyecto)
+            semestre_data[semestre][0]+=1
+            
         profesor = culminacion.estudiante.tutor
         escuela = culminacion.estudiante.escuela
         estudiantes_por_escuela[escuela]+=1
+        estudiantes_por_semestre_escuela[semestre][escuela]+=1
         if not profesor in tutores_de_proyectos_ejecutados:
             tutores_de_proyectos_ejecutados.append(profesor)
             tutores_por_escuela[profesor.escuela]+=1
+            semestre_data[semestre][1]+=1
+            
         comunidad = culminacion.estudiante.comunidad
         if not comunidad in comunidades_atendidas:
             comunidades_atendidas.append(comunidad)
+            semestre_data[semestre][3]+=1
         
     
     render_data.update({"num_culminaciones":num_culminaciones,
@@ -118,7 +136,9 @@ def report(request):
                         "comunidades_atendidas":comunidades_atendidas,
                         "semestres_cursados":semestres_cursados,
                         "estudiantes_por_escuela":estudiantes_por_escuela,
-                        "tutores_por_escuela": tutores_por_escuela})
+                        "tutores_por_escuela": tutores_por_escuela,
+                        "estudiantes_por_semestre_escuela":estudiantes_por_semestre_escuela,
+                        "semestre_data":semestre_data})
     
     return render(request,'report.html',render_data)
     

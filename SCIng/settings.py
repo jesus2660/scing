@@ -38,11 +38,10 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'autocomplete_light',
     'suit',
     'django.contrib.admin',
     'main',
-    'dbbackup',
+    #'dbbackup', 
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -67,13 +66,13 @@ WSGI_APPLICATION = 'SCIng.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
+DB_PATH = 'C:/Users/Jesus Gomez/Documents/SC'
+DB_NAME = 'scing_db'
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'scing_db',
-        'USER': 'root',
-        'PASSWORD': 'root',
-        'PORT': '8001',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(DB_PATH,DB_NAME),
     }
 }
 

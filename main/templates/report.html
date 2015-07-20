@@ -430,7 +430,7 @@ $(function () {
         });
     });
     
-    $(function () {
+$(function () {
     $('#grafica-8').highcharts({
     chart: {
                 type: 'column'
@@ -474,6 +474,98 @@ $(function () {
                     {{value}}{% if not forloop.last %},{% endif %}
                     {% endfor %}]
             }
+            ]
+        });
+    });
+    
+$(function () {
+    $('#grafica-9').highcharts({
+    chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Estudiantes culminados por semestre'
+            },
+            xAxis: {
+                categories: [
+                    {% for key in estudiantes_por_escuela.keys %}
+                    '{{key.nombre}}'{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                ]
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Numero de estudiantes'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            credits: {
+                enabled: false
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{% for item,results in estudiantes_por_semestre_escuela.items %}{
+            name: '{{item.codigo}}',
+            data: [{% for val in results.values %}
+                    {{val}}{% if not forloop.last %},{% endif %}
+                    {% endfor %}]
+            },{% endfor %}
+            ]
+        });
+    });
+    
+    $(function () {
+    $('#grafica-10').highcharts({
+    chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Resumen por semestre'
+            },
+            xAxis: {
+                categories: ['Proyectos','Tutores','Estudiantes','Comunidades']
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'N°'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            credits: {
+                enabled: false
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{% for item,val_list in semestre_data.items %}{
+            name: '{{item.codigo}}',
+            data: [{% for val in val_list %}
+                    {{val}}{% if not forloop.last %},{% endif %}
+                    {% endfor %}]
+            },{% endfor %}
             ]
         });
     });
